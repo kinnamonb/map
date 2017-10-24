@@ -1,0 +1,15 @@
+{
+  "name": "fsnd-map",
+  "version": "1.0.0",
+  "description": "Udacity Map Project",
+  "main": "index.js",
+  "repository": "https://github.com/kinnamonb/map.git",
+  "author": "Brett Kinnamon <b.kinnamon@outlook.com>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "knockout": "^3.4.2"
+  },
+  "devDependencies": {
+    "webpack": "^3.8.1"
+  }
+}
