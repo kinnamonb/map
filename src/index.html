@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Town Map</title>
+</head>
+
+<body>
+
+    <div id="map"></div>
+
+    <div id="menu">
+        <button onclick="townMap.bounceMarker(Model.locations[0].marker);">Bounce!</button>
+    </div>
+
+    <script>
+        var TownMap = function () {
+            this.init = function () {
+                var map = new google.maps.Map(document.getElementById('map'), Model.initialView);
+                var bounds = new google.maps.LatLngBounds();
+
+                Model.locations.forEach(function (location, index) {
+                    setTimeout(function () {
+                        var marker = new google.maps.Marker({
+                            position: location.position,
+                            animation: google.maps.Animation.DROP,
+                            map: map
+                        });
+                        location.marker = marker;
+                        bounds.extend(marker.position);
+                    }, index * 300);
+                });
+            };
+            
+            this.bounceMarker = function (marker) {
+                marker.setAnimation(google.maps.Animation.BOUNCE);
+                setTimeout(function () {
+                    marker.setAnimation(null);
+                }, 1);
+            }
+        };
+
+        Model = {};
+        Model.initialView = {
+            zoom: 12,
+            center: {
+                lat: 39.575379,
+                lng: -76.995815
+            }
+        }
+        Model.locations = [{
+                position: {
+                    lat: 39.518414,
+                    lng: -76.984506
+                }
+            },
+            {
+                position: {
+                    lat: 39.584615,
+                    lng: -77.010905
+                }
+            }
+        ];
+
+        townMap = new TownMap();
+    </script>
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmyXDT4NC-LUF-X7eytTXqyOyUrvaetrs&callback=townMap.init"></script>
+</body>
+
+</html>
