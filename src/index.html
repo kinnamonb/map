@@ -13,34 +13,84 @@
     <div id="map"></div>
 
     <div id="menu">
-        <button onclick="townMap.bounceMarker(Model.locations[0].marker);">Bounce!</button>
+        <button onclick="townMap.recenter();">Recenter</button>
     </div>
 
     <script>
         var TownMap = function () {
-            this.init = function () {
-                var map = new google.maps.Map(document.getElementById('map'), Model.initialView);
-                var bounds = new google.maps.LatLngBounds();
+            var self = this;
 
+            self.init = function () {
+                // Store some useful stuff so we can use it later
+                self.map = new google.maps.Map(document.getElementById('map'), Model.initialView);
+                self.bounds = new google.maps.LatLngBounds();
+                self.infoWindow = new google.maps.InfoWindow();
+                // Track the number of markers that have been added
+                var totalMarkers = Model.locations.length;
+                var markerCount = 0;
+                // Create a new marker for each location
                 Model.locations.forEach(function (location, index) {
+                    // Offset the loading of the markers
                     setTimeout(function () {
-                        var marker = new google.maps.Marker({
-                            position: location.position,
-                            animation: google.maps.Animation.DROP,
-                            map: map
-                        });
-                        location.marker = marker;
-                        bounds.extend(marker.position);
-                    }, index * 300);
+                        self.createMarker(location);
+                        markerCount++;
+                        if (markerCount === totalMarkers) {
+                            // Adjust the map view to see all of the markers
+                            self.map.fitBounds(self.bounds);
+                            // Store this new center so we can reset to it later
+                            self.initialCenter = self.map.getCenter();
+                        }
+                    }, index * 200);
                 });
             };
-            
-            this.bounceMarker = function (marker) {
+
+            self.createMarker = function (location) {
+                // Create a marker
+                var marker = new google.maps.Marker({
+                    position: location.position,
+                    animation: google.maps.Animation.DROP,
+                    map: self.map
+                });
+                // Add the click listener
+                marker.addListener('click', function () {
+                    self.activateMarker(location);
+                });
+                // Store important information
+                location.marker = marker;
+                self.bounds.extend(marker.getPosition());
+            }
+
+            self.bounceMarker = function (marker) {
                 marker.setAnimation(google.maps.Animation.BOUNCE);
                 setTimeout(function () {
                     marker.setAnimation(null);
-                }, 1);
+                }, 700);
+            };
+
+            self.centerMap = function (marker) {
+                self.map.panTo(marker.position);
+            };
+
+            self.showInfowWindow = function (location) {
+                var output = '<h1>' + location.name + '</h1>';
+                self.infoWindow.setContent(output);
+                self.infoWindow.open(self.map, location.marker);
+            };
+
+            self.closeInfoWindow = function () {
+                self.infoWindow.close();
             }
+
+            self.activateMarker = function (location) {
+                self.centerMap(location.marker);
+                self.bounceMarker(location.marker);
+                self.showInfowWindow(location);
+            };
+
+            self.recenter = function () {
+                self.closeInfoWindow();
+                self.map.panTo(self.initialCenter);
+            };
         };
 
         Model = {};
@@ -52,12 +102,14 @@
             }
         }
         Model.locations = [{
+                name: 'Bullock\'s Family Country Restaurant',
                 position: {
                     lat: 39.518414,
                     lng: -76.984506
                 }
             },
             {
+                name: 'Baugher\'s Family Restaurant',
                 position: {
                     lat: 39.584615,
                     lng: -77.010905
