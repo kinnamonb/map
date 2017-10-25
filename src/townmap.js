@@ -16,10 +16,12 @@ var TownMap = function () {
         self.infoWindow = new google.maps.InfoWindow();
     };
 
-    self.setupMarkers = function (locations, showDetails) {
+    self.setupMarkers = function (locations, showDetails, closeDetails) {
         // Track the number of markers that have been added
         var totalMarkers = locations.length;
         var markerCount = 0;
+        // Make sure we close the details when a user closes the info window
+        self.infoWindow.addListener('closeclick', closeDetails);
 
         // Create a new marker for each location
         locations.forEach(function (location, index) {

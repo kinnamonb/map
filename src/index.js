@@ -52,7 +52,7 @@ var LocationsViewModel = function () {
     };
 
     // Setup the markers based upon the model data
-    townMap.setupMarkers(Model.locations, self.detailsView.open);
+    townMap.setupMarkers(Model.locations, self.detailsView.open, self.detailsView.close);
     self.setup = true;  // Done setting up
 };
 
@@ -110,6 +110,8 @@ var DetailsViewModel = function () {
     self.close = function () {
         // Hide the view
         self.isVisible(false);
+        // Recenter the map
+        townMap.recenter();
     }
 };
 
