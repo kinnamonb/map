@@ -12,6 +12,7 @@
     "watch": "webpack --watch"
   },
   "dependencies": {
+    "jquery": "^3.2.1",
     "knockout": "^3.4.2"
   },
   "devDependencies": {
