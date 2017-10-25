@@ -34,6 +34,14 @@ var Model = {
                 lng: -76.979101
             },
             filters: [2]
+        },
+        {
+            name: 'TownMall of Westminster',
+            position: {
+                lat: 39.578505,
+                lng: -76.983051
+            },
+            filters: [3]
         }
     ],
 
