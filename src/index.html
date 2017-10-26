@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Town Map</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
 <body>
@@ -29,7 +30,7 @@
 
     <!-- LOCATION DETAILS -->
     <div class="sidePanel" data-bind="with: detailsView,visible: detailsView.isVisible">
-        <div id="close" class="btn btnClose" data-bind="click: close">X</div>
+        <div class="btn btnClose material-icons" data-bind="click: close">clear</div>
 
         <h1 data-bind="text: name"></h1>
 
@@ -49,7 +50,13 @@
                 <li data-bind="html: $parent.hour($data)"></li>
             </ul>
         </div>
+
+        <footer>
+            Data sourced from <a data-bind="attr: { href: foursquareLink }">Foursquare</a>.
+        </footer>
     </div>
+
+    <div class="btn btnMenu material-icons" data-bind="click: toggle">menu</div>
 
     <!-- REMOVED ASYNC. IT CAUSED ISSUES WITH LOAD ORDER. -->
     <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmyXDT4NC-LUF-X7eytTXqyOyUrvaetrs&callback=window.townMap.init"></script>

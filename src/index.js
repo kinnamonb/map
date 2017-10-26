@@ -51,6 +51,15 @@ var LocationsViewModel = function () {
         self.detailsView.open(listItem.location);
     };
 
+    self.toggle = function () {
+        var panel = $('.sidePanel');
+        if (panel.position().left < 10) {
+            panel.animate({left: '10px'}, 200);
+        } else {
+            panel.animate({left: '-300px'}, 200);
+        }
+    };
+
     // Setup the markers based upon the model data
     townMap.setupMarkers(Model.locations, self.detailsView.open, self.detailsView.close);
     self.setup = true; // Done setting up
@@ -121,6 +130,7 @@ var DetailsViewModel = function () {
 
     self.foursquareUrl = 'https://api.foursquare.com/v2/venues/';
     self.foursquareAppend = '?v=20171026&m=foursquare&client_id=U4FAMHFYKYTW02WRADDJTHULGASZYJHMCWM4MCAMHHBNGYBM&client_secret=TFVBS5ZNPDBZSBDT4O41OGAEXRAWKVHR4V5WLVK42DM0GTJP'
+    self.foursquareLink = ko.observable();
 
     self.open = function (location) {
         // Let the user know we're trying to get information
@@ -157,6 +167,9 @@ var DetailsViewModel = function () {
                     self.statusText(venue.hours.status);
                     self.hours(venue.hours.timeframes);
                 }
+                
+                // Provide the source of our information
+                self.foursquareLink(venue.shortUrl);
             }
         });
 
