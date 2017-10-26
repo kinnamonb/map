@@ -53,7 +53,7 @@ var LocationsViewModel = function () {
 
     // Setup the markers based upon the model data
     townMap.setupMarkers(Model.locations, self.detailsView.open, self.detailsView.close);
-    self.setup = true;  // Done setting up
+    self.setup = true; // Done setting up
 };
 
 
@@ -98,11 +98,68 @@ var DetailsViewModel = function () {
     var self = this;
 
     self.isVisible = ko.observable(false);
-    self.content = ko.observable('');
+
+    // Prepare for information
+    self.name = ko.observable(null);
+    self.url = ko.observable(null);
+    self.phoneNumber = ko.observable(null);
+    self.phoneLink = ko.computed(function () {
+        return 'tel:' + self.phoneNumber();
+    });
+    self.phonePretty = ko.observable(null);
+    self.address1 = ko.observable(null);
+    self.address2 = ko.observable(null);
+    self.statusText = ko.observable(null);
+    self.status = ko.computed(function () {
+        return '<strong>Today: </strong>' + self.statusText();
+    });
+    self.hours = ko.observableArray(null);
+    self.hour = function (data) {
+        var formatted = '<strong>' + data.days + ': </strong>' + data.open[0].renderedTime;
+        return formatted;
+    };
+
+    self.foursquareUrl = 'https://api.foursquare.com/v2/venues/';
+    self.foursquareAppend = '?v=20171026&m=foursquare&client_id=U4FAMHFYKYTW02WRADDJTHULGASZYJHMCWM4MCAMHHBNGYBM&client_secret=TFVBS5ZNPDBZSBDT4O41OGAEXRAWKVHR4V5WLVK42DM0GTJP'
 
     self.open = function (location) {
-        var details = '<h1>' + location.name + '</h1>';
-        self.content(details);
+        // Let the user know we're trying to get information
+        self.address1('<h1>Loading information ...</h1>');
+
+        // Start retrieving the information
+        self.name(location.name);
+        $.ajax({
+            url: self.foursquareUrl + location.foursquareId + self.foursquareAppend,
+            method: 'GET',
+            // Something bad happened
+            error: function (xhr, status) {
+                self.address1('Unfortunately, there was a problem with gathering more information. Check your connection or wait a few minutes and try again.');
+            },
+            // Display the information we found
+            success: function (data) {
+                var venue = data.response.venue;
+
+                if (venue.url) {
+                    self.url(venue.url);
+                }
+
+                if (venue.contact.phone) {
+                    self.phoneNumber(venue.contact.phone);
+                    self.phonePretty(venue.contact.formattedPhone);
+                }
+
+                if (venue.location.formattedAddress) {
+                    self.address1(venue.location.formattedAddress[0]);
+                    self.address2(venue.location.formattedAddress[1]);
+                }
+
+                if (venue.hours) {
+                    self.statusText(venue.hours.status);
+                    self.hours(venue.hours.timeframes);
+                }
+            }
+        });
+
         // Show the view
         self.isVisible(true);
     }
@@ -110,6 +167,17 @@ var DetailsViewModel = function () {
     self.close = function () {
         // Hide the view
         self.isVisible(false);
+
+        // Reset the data
+        self.name(null);
+        self.url(null);
+        self.phoneNumber(null);
+        self.phonePretty(null);
+        self.address1(null);
+        self.address2(null);
+        self.statusText(null);
+        self.hours(null);
+
         // Recenter the map
         townMap.recenter();
     }

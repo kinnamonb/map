@@ -26,11 +26,29 @@
             </ul>
         </div>
     </div>
-    
+
     <!-- LOCATION DETAILS -->
-    <div class="sidePanel" data-bind="visible: detailsView.isVisible">
-        <div id="close" class="btn btnClose" data-bind="click: detailsView.close">X</div>
-        <div data-bind="html: detailsView.content"></div>
+    <div class="sidePanel" data-bind="with: detailsView,visible: detailsView.isVisible">
+        <div id="close" class="btn btnClose" data-bind="click: close">X</div>
+
+        <h1 data-bind="text: name"></h1>
+
+        <a data-bind="attr: { href: url, title: name }, text: url"></a>
+
+        <p>
+            <a data-bind="attr: { href: phoneLink }, text: phonePretty" title="Call"></a>
+        </p>
+
+        <p data-bind="text: address1"></p>
+        <p data-bind="text: address2"></p>
+
+        <div data-bind="visible: statusText">
+            <h3>Hours</h3>
+            <p data-bind="html: status"></p>
+            <ul data-bind="foreach: hours">
+                <li data-bind="html: $parent.hour($data)"></li>
+            </ul>
+        </div>
     </div>
 
     <!-- REMOVED ASYNC. IT CAUSED ISSUES WITH LOAD ORDER. -->
