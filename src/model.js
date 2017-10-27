@@ -46,6 +46,24 @@ var Model = {
             },
             filters: [1,3],
             foursquareId: '4bbb62301261d13a6c99eb98'
+        },
+        {
+            name: 'Carroll County Farm Museum',
+            position: {
+                lat: 39.558771,
+                lng: -76.995576
+            },
+            filters: [2],
+            foursquareId: '4ad4c016f964a52013f020e3'
+        },
+        {
+            name: 'Hoffman\'s Ice Cream',
+            position: {
+                lat: 39.547547,
+                lng: -76.992495
+            },
+            filters: [1],
+            foursquareId: '4bb3dc4214cfd13ad4a816ab'
         }
     ],
 
