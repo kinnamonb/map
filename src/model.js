@@ -1,4 +1,4 @@
-
+/* jshint esversion: 6 */
 
 var Model = {
     // The initial view data for the map

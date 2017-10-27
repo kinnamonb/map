@@ -1,3 +1,5 @@
+/* jshint esversion: 6 */
+
 var TownMap = function () {
     var self = this;
     
@@ -58,10 +60,11 @@ var TownMap = function () {
         self.bounds.extend(marker.getPosition());
     };
 
+    // Hide the markers (remove the map) from those that do not match the filter
     self.filterMarkers = function (locations, filterIndex) {
         locations.forEach(function (listItem) {
             listItem.location.marker.setMap(self.map);
-            if (filterIndex != 0 && listItem.location.filters.indexOf(filterIndex) === -1) {
+            if (filterIndex !== 0 && listItem.location.filters.indexOf(filterIndex) === -1) {
                 listItem.location.marker.setMap(null);
             } else {
                 self.bounceMarker(listItem.location.marker);
@@ -88,7 +91,7 @@ var TownMap = function () {
 
     self.closeInfoWindow = function () {
         self.infoWindow.close();
-    }
+    };
 
     self.activateLocation = function (location) {
         self.centerMap(location.marker);

@@ -1,3 +1,5 @@
+/* jshint esversion: 6 */
+
 import ko from 'knockout';
 import $ from 'jquery';
 import './style.scss';
@@ -23,7 +25,7 @@ var LocationsViewModel = function () {
             return;
         }
         // Filter the list of locations
-        self.locationList.filter(filter)
+        self.locationList.filter(filter);
         // Filter the map pins
         var index = Model.filters.indexOf(filter);
         townMap.filterMarkers(self.locationList.locations(), index);
@@ -71,11 +73,12 @@ var LocationListViewModel = function () {
 
     self.locations = ko.observableArray();
 
+    // Hide locations that don't match the given filter
     self.filter = function (filter) {
         var index = Model.filters.indexOf(filter);
         self.locations().forEach(function (listItem) {
             listItem.isVisible(true);
-            if (index != 0 && listItem.location.filters.indexOf(index) === -1) {
+            if (index !== 0 && listItem.location.filters.indexOf(index) === -1) {
                 listItem.isVisible(false);
             }
         });
@@ -128,8 +131,9 @@ var DetailsViewModel = function () {
         return formatted;
     };
 
+    // Foursquare stuffs
     self.foursquareUrl = 'https://api.foursquare.com/v2/venues/';
-    self.foursquareAppend = '?v=20171026&m=foursquare&client_id=U4FAMHFYKYTW02WRADDJTHULGASZYJHMCWM4MCAMHHBNGYBM&client_secret=TFVBS5ZNPDBZSBDT4O41OGAEXRAWKVHR4V5WLVK42DM0GTJP'
+    self.foursquareAppend = '?v=20171026&m=foursquare&client_id=U4FAMHFYKYTW02WRADDJTHULGASZYJHMCWM4MCAMHHBNGYBM&client_secret=TFVBS5ZNPDBZSBDT4O41OGAEXRAWKVHR4V5WLVK42DM0GTJP';
     self.foursquareLink = ko.observable();
 
     self.open = function (location) {
@@ -168,14 +172,14 @@ var DetailsViewModel = function () {
                     self.hours(venue.hours.timeframes);
                 }
                 
-                // Provide the source of our information
+                // Provide a link to the source of our information
                 self.foursquareLink(venue.shortUrl);
             }
         });
 
         // Show the view
         self.isVisible(true);
-    }
+    };
 
     self.close = function () {
         // Hide the view
@@ -193,7 +197,7 @@ var DetailsViewModel = function () {
 
         // Recenter the map
         townMap.recenter();
-    }
+    };
 };
 
 // Wait until the DOM is ready
