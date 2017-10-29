@@ -206,5 +206,5 @@ var DetailsViewModel = function () {
 // Initialize the knockout bindings
 window.startApp = function() {
     ko.applyBindings(new LocationsViewModel());
-}
+};
 
