@@ -10,6 +10,9 @@ import Model from './model.js';
 var LocationsViewModel = function () {
     var self = this;
 
+    // Initialize the map
+    townMap.init();
+
     // The view model for the list of locations
     self.locationList = new LocationListViewModel();
     self.detailsView = new DetailsViewModel();
@@ -200,7 +203,8 @@ var DetailsViewModel = function () {
     };
 };
 
-// Wait until the DOM is ready
-$(function () {
+// Initialize the knockout bindings
+window.startApp = function() {
     ko.applyBindings(new LocationsViewModel());
-});
+}
+
