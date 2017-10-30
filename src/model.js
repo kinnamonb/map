@@ -1,17 +1,19 @@
 /* jshint esversion: 6 */
 
-var Model = {
+var Model = function () {
+    var self = this;
+
     // The initial view data for the map
-    initialView: {
+    self.initialView = {
         zoom: 12,
         center: {
             lat: 39.575379,
             lng: -76.995815
         }
-    },
+    };
 
     // Various locations in/near Westminster, MD
-    locations: [{
+    self.locations = [{
             name: 'Bullock\'s',
             position: {
                 lat: 39.518414,
@@ -65,10 +67,10 @@ var Model = {
             filters: [1],
             foursquareId: '4bb3dc4214cfd13ad4a816ab'
         }
-    ],
+    ];
 
     // The filter options
-    filters: ['All', 'Food', 'Fun', 'Shopping']
+    self.filters = ['All', 'Food', 'Fun', 'Shopping'];
 };
 
-export default Model;
+export let model = new Model();

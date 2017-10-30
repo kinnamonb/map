@@ -9,10 +9,10 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!-- START WEBPACK SCRIPTS -->
-    
-        <link href="style.css" rel="stylesheet">
+    <% for (var href of htmlWebpackPlugin.files.css) { %>
+        <link href="<%- href %>" rel="stylesheet">
         </script>
-        
+        <% } %>
             <!-- END WEBPACK SCRIPTS -->
 </head>
 
@@ -74,9 +74,9 @@
     </div>
 
     <!-- START WEBPACK SCRIPTS -->
-    
-        <script src="index.bundle.js"></script>
-    
+    <% for (var src of htmlWebpackPlugin.files.js) { %>
+        <script src="<%- src %>"></script>
+    <% } %>
     <!-- END WEBPACK SCRIPTS -->
 
     <script defer async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmyXDT4NC-LUF-X7eytTXqyOyUrvaetrs&callback=window.townMap.init"

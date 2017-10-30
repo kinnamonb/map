@@ -4,21 +4,18 @@ import ko from 'knockout';
 import $ from 'jquery';
 import './style.scss';
 import townMap from './townmap.js';
-import Model from './model.js';
+import { model } from './model.js';
 
 
 var LocationsViewModel = function () {
     var self = this;
-
-    // Initialize the map
-    townMap.init();
 
     // The view model for the list of locations
     self.locationList = new LocationListViewModel();
     self.detailsView = new DetailsViewModel();
 
     // Get the list of filters
-    self.filters = Model.filters;
+    self.filters = model.filters;
 
     // Watch the filter for changes
     self.selectedFilter = ko.observable();
@@ -30,7 +27,7 @@ var LocationsViewModel = function () {
         // Filter the list of locations
         self.locationList.filter(filter);
         // Filter the map pins
-        var index = Model.filters.indexOf(filter);
+        var index = model.filters.indexOf(filter);
         townMap.filterMarkers(self.locationList.locations(), index);
     }, this);
 
@@ -42,7 +39,7 @@ var LocationsViewModel = function () {
     // Reset the map
     self.resetFilter = function () {
         // Reset the dropdown
-        self.selectedFilter(Model.filters[0]);
+        self.selectedFilter(model.filters[0]);
         // Reset the list
         self.locationList.reset();
         // Reset the map
@@ -64,10 +61,9 @@ var LocationsViewModel = function () {
             panel.animate({left: '-300px'}, 200);
         }
     };
-
-    // Setup the markers based upon the model data
-    townMap.setupMarkers(Model.locations, self.detailsView.open, self.detailsView.close);
-    self.setup = true; // Done setting up
+    
+    townMap.showDetails = self.detailsView.open;
+    townMap.closeDetails = self.detailsView.close;
 };
 
 
@@ -78,7 +74,7 @@ var LocationListViewModel = function () {
 
     // Hide locations that don't match the given filter
     self.filter = function (filter) {
-        var index = Model.filters.indexOf(filter);
+        var index = model.filters.indexOf(filter);
         self.locations().forEach(function (listItem) {
             listItem.isVisible(true);
             if (index !== 0 && listItem.location.filters.indexOf(index) === -1) {
@@ -95,7 +91,7 @@ var LocationListViewModel = function () {
     };
 
     // Load all of the locations into the list
-    Model.locations.forEach(function (location) {
+    model.locations.forEach(function (location) {
         self.locations.push(new ListItemViewModel(location));
     });
 };
@@ -203,8 +199,10 @@ var DetailsViewModel = function () {
     };
 };
 
-// Initialize the knockout bindings
-window.startApp = function() {
-    ko.applyBindings(new LocationsViewModel());
+window.apiError = function () {
+    $('#apiError').fadeIn();
 };
 
+$(function () {
+    ko.applyBindings(new LocationsViewModel());
+});

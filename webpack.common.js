@@ -13,7 +13,8 @@ module.exports = {
         new ExtractTextPlugin('style.css'),
         new CleanWebpackPlugin(['dist']),
         new HtmlWebpackPlugin({
-            template: 'src/index.html'
+            template: 'src/index.ejs',
+            inject: false
         }),
         new webpack.NamedModulesPlugin()
     ],

@@ -7,7 +7,7 @@
   "author": "Brett Kinnamon <b.kinnamon@outlook.com>",
   "license": "Apache-2.0",
   "scripts": {
-    "start": "webpack-dev-server --open --config webpack.dev.js",
+    "start": "webpack-dev-server --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js"
   },
   "dependencies": {

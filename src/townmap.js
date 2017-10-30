@@ -1,9 +1,9 @@
 /* jshint esversion: 6 */
 
+import { model } from './model.js';
+
 var TownMap = function () {
     var self = this;
-    
-    self.ready = false; // Not done setting up
 
     self.init = function () {
         // Store some useful stuff so we can use it later
@@ -16,20 +16,24 @@ var TownMap = function () {
         });
         self.bounds = new google.maps.LatLngBounds();
         self.infoWindow = new google.maps.InfoWindow();
+
+        self.setupMarkers();
     };
 
-    self.setupMarkers = function (locations, showDetails, closeDetails) {
+    self.setupMarkers = function () {
         // Track the number of markers that have been added
-        var totalMarkers = locations.length;
+        var totalMarkers = model.locations.length;
         var markerCount = 0;
         // Make sure we close the details when a user closes the info window
-        self.infoWindow.addListener('closeclick', closeDetails);
+        self.infoWindow.addListener('closeclick', function () {
+            self.closeDetails();
+        });
 
         // Create a new marker for each location
-        locations.forEach(function (location, index) {
+        model.locations.forEach(function (location, index) {
             // Offset the loading of the markers
             setTimeout(function () {
-                self.createMarker(location, showDetails);
+                self.createMarker(location);
                 markerCount++;
                 if (markerCount === totalMarkers) {
                     // Adjust the map view to see all of the markers
@@ -53,7 +57,7 @@ var TownMap = function () {
         // Add the click listener
         marker.addListener('click', function () {
             self.activateLocation(location);
-            showDetails(location);
+            self.showDetails(location);
         });
         // Store important information
         location.marker = marker;
@@ -61,13 +65,13 @@ var TownMap = function () {
     };
 
     // Hide the markers (remove the map) from those that do not match the filter
-    self.filterMarkers = function (locations, filterIndex) {
-        locations.forEach(function (listItem) {
-            listItem.location.marker.setMap(self.map);
-            if (filterIndex !== 0 && listItem.location.filters.indexOf(filterIndex) === -1) {
-                listItem.location.marker.setMap(null);
+    self.filterMarkers = function (filterIndex) {
+        model.locations.forEach(function (location) {
+            location.marker.setMap(self.map);
+            if (filterIndex !== 0 && location.filters.indexOf(filterIndex) === -1) {
+                location.marker.setMap(null);
             } else {
-                self.bounceMarker(listItem.location.marker);
+                self.bounceMarker(location.marker);
             }
         });
     };
@@ -78,6 +82,9 @@ var TownMap = function () {
             marker.setAnimation(null);
         }, 700);
     };
+
+    self.showDetails = function () {};
+    self.closeDetails = function () {};
 
     self.centerMap = function (marker) {
         self.map.panTo(marker.position);

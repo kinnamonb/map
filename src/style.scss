@@ -2,6 +2,8 @@
 $bgcolor: #fff;
 $fgcolor: rgba(0,0,0,0.6);
 $accent: #4285F4;
+$overlayColor: rgba(255,255,255,0.8);
+
 body,
 html {
     width: 100%;
@@ -11,8 +13,21 @@ html {
     font-family: "Open Sans", sans-serif;
 }
 
-#app {
+#apiError {
     display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: $overlayColor;
+
+    #errorMsg {
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+        text-align: center;
+    }
 }
 
 #map {
