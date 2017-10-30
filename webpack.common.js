@@ -1,3 +1,5 @@
+/* jshint esversion: 6 */
+
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -13,7 +15,7 @@ module.exports = {
         new ExtractTextPlugin('style.css'),
         new CleanWebpackPlugin(['dist']),
         new HtmlWebpackPlugin({
-            template: 'src/index.ejs',
+            template: 'src/index.html',
             inject: false
         }),
         new webpack.NamedModulesPlugin()
